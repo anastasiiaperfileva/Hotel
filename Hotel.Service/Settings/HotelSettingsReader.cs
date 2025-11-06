@@ -8,9 +8,6 @@ public static class HotelSettingsReader
         {
             ServiceUri = configuration.GetValue<Uri>("Uri"),
             HotelDbContextConnectionString = configuration.GetValue<string>("HotelDbContext"),
-            IdentityServerUri = configuration.GetValue<string>("IdentityServerSettings:Uri"),
-            ClientId = configuration.GetValue<string>("IdentityServerSettings:ClientId"),
-            ClientSecret = configuration.GetValue<string>("IdentityServerSettings:ClientSecret"),
         };
     }
 }
