@@ -30,9 +30,6 @@ namespace Hotel.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AnnouncementStatusId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -56,6 +53,9 @@ namespace Hotel.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -71,8 +71,6 @@ namespace Hotel.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnnouncementStatusId");
-
                     b.HasIndex("ExternalId")
                         .IsUnique();
 
@@ -86,36 +84,6 @@ namespace Hotel.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Hotel.DataAccess.Entities.AnnouncementStatusEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId")
-                        .IsUnique();
-
-                    b.ToTable("AnnouncementStatuses");
-                });
-
             modelBuilder.Entity("Hotel.DataAccess.Entities.BookingEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -123,9 +91,6 @@ namespace Hotel.DataAccess.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookingStatusId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("timestamp with time zone");
@@ -155,6 +120,9 @@ namespace Hotel.DataAccess.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("TotalPrice")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)");
@@ -166,8 +134,6 @@ namespace Hotel.DataAccess.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookingStatusId");
 
                     b.HasIndex("ExternalId")
                         .IsUnique();
@@ -186,36 +152,6 @@ namespace Hotel.DataAccess.Migrations
 
                             t.HasCheckConstraint("CK_Booking_TotalPrice", "\"TotalPrice\" > 0");
                         });
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.BookingStatusEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId")
-                        .IsUnique();
-
-                    b.ToTable("BookingStatuses");
                 });
 
             modelBuilder.Entity("Hotel.DataAccess.Entities.HotelEntity", b =>
@@ -265,6 +201,9 @@ namespace Hotel.DataAccess.Migrations
                     b.HasIndex("ExternalId")
                         .IsUnique();
 
+                    b.HasIndex("Phone")
+                        .IsUnique();
+
                     b.ToTable("Hotel", t =>
                         {
                             t.HasCheckConstraint("CK_Hotel_Rating", "\"Rating\" >= 0 AND \"Rating\" <= 5");
@@ -299,7 +238,7 @@ namespace Hotel.DataAccess.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ReviewStatusId")
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<string>("Text")
@@ -317,44 +256,12 @@ namespace Hotel.DataAccess.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.HasIndex("ReviewStatusId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews", t =>
                         {
                             t.HasCheckConstraint("CK_Review_Rating", "\"Rating\" BETWEEN 1 AND 5");
                         });
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.ReviewStatusEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId")
-                        .IsUnique();
-
-                    b.ToTable("ReviewStatuses");
                 });
 
             modelBuilder.Entity("Hotel.DataAccess.Entities.RoomEntity", b =>
@@ -382,7 +289,7 @@ namespace Hotel.DataAccess.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("character varying(5)");
 
-                    b.Property<int>("RoomStatusId")
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<int>("TypeOfRoomId")
@@ -393,11 +300,10 @@ namespace Hotel.DataAccess.Migrations
                     b.HasIndex("ExternalId")
                         .IsUnique();
 
-                    b.HasIndex("HotelId");
-
-                    b.HasIndex("RoomStatusId");
-
                     b.HasIndex("TypeOfRoomId");
+
+                    b.HasIndex("HotelId", "Number")
+                        .IsUnique();
 
                     b.ToTable("Rooms");
                 });
@@ -450,36 +356,6 @@ namespace Hotel.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Hotel.DataAccess.Entities.RoomStatusEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId")
-                        .IsUnique();
-
-                    b.ToTable("RoomsStatuses");
-                });
-
             modelBuilder.Entity("Hotel.DataAccess.Entities.TypeOfRoomEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -528,23 +404,16 @@ namespace Hotel.DataAccess.Migrations
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)");
 
-                    b.Property<int?>("RoomStatusEntityId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("RoomsCount")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TypeOfRoomsStatusId")
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExternalId")
                         .IsUnique();
-
-                    b.HasIndex("RoomStatusEntityId");
-
-                    b.HasIndex("TypeOfRoomsStatusId");
 
                     b.ToTable("TypesOfRooms", t =>
                         {
@@ -554,36 +423,6 @@ namespace Hotel.DataAccess.Migrations
 
                             t.HasCheckConstraint("CK_TypeOfRooms_PricePerDay", "\"PricePerDay\" > 0");
                         });
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.TypeOfRoomStatusEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId")
-                        .IsUnique();
-
-                    b.ToTable("TypesOfRoomsStatuses");
                 });
 
             modelBuilder.Entity("Hotel.DataAccess.Entities.UserEntity", b =>
@@ -624,15 +463,15 @@ namespace Hotel.DataAccess.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("UserRoleId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserStatusId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -642,81 +481,14 @@ namespace Hotel.DataAccess.Migrations
                     b.HasIndex("ExternalId")
                         .IsUnique();
 
-                    b.HasIndex("UserRoleId");
-
-                    b.HasIndex("UserStatusId");
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Hotel.DataAccess.Entities.UserRoleEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId")
-                        .IsUnique();
-
-                    b.ToTable("UserRoles");
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.UserStatusEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId")
-                        .IsUnique();
-
-                    b.ToTable("UserStatuses");
-                });
-
             modelBuilder.Entity("Hotel.DataAccess.Entities.AnnouncementEntity", b =>
                 {
-                    b.HasOne("Hotel.DataAccess.Entities.AnnouncementStatusEntity", "AnnouncementStatus")
-                        .WithMany("Announcements")
-                        .HasForeignKey("AnnouncementStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Hotel.DataAccess.Entities.HotelEntity", "Hotel")
                         .WithMany("Announcements")
                         .HasForeignKey("HotelId")
@@ -729,8 +501,6 @@ namespace Hotel.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AnnouncementStatus");
-
                     b.Navigation("Hotel");
 
                     b.Navigation("User");
@@ -738,12 +508,6 @@ namespace Hotel.DataAccess.Migrations
 
             modelBuilder.Entity("Hotel.DataAccess.Entities.BookingEntity", b =>
                 {
-                    b.HasOne("Hotel.DataAccess.Entities.BookingStatusEntity", "BookingStatus")
-                        .WithMany("Bookings")
-                        .HasForeignKey("BookingStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Hotel.DataAccess.Entities.TypeOfRoomEntity", "TypeOfRoom")
                         .WithMany("Bookings")
                         .HasForeignKey("TypeOfRoomId")
@@ -755,8 +519,6 @@ namespace Hotel.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("BookingStatus");
 
                     b.Navigation("TypeOfRoom");
 
@@ -771,12 +533,6 @@ namespace Hotel.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hotel.DataAccess.Entities.ReviewStatusEntity", "ReviewStatus")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ReviewStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Hotel.DataAccess.Entities.UserEntity", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
@@ -784,8 +540,6 @@ namespace Hotel.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Hotel");
-
-                    b.Navigation("ReviewStatus");
 
                     b.Navigation("User");
                 });
@@ -798,12 +552,6 @@ namespace Hotel.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hotel.DataAccess.Entities.RoomStatusEntity", "RoomStatus")
-                        .WithMany("Rooms")
-                        .HasForeignKey("RoomStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Hotel.DataAccess.Entities.TypeOfRoomEntity", "TypeOfRoom")
                         .WithMany("Rooms")
                         .HasForeignKey("TypeOfRoomId")
@@ -811,8 +559,6 @@ namespace Hotel.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Hotel");
-
-                    b.Navigation("RoomStatus");
 
                     b.Navigation("TypeOfRoom");
                 });
@@ -828,50 +574,6 @@ namespace Hotel.DataAccess.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Hotel.DataAccess.Entities.TypeOfRoomEntity", b =>
-                {
-                    b.HasOne("Hotel.DataAccess.Entities.RoomStatusEntity", null)
-                        .WithMany("TypeOfRooms")
-                        .HasForeignKey("RoomStatusEntityId");
-
-                    b.HasOne("Hotel.DataAccess.Entities.TypeOfRoomStatusEntity", "TypeOfRoomStatus")
-                        .WithMany("TypeOfRooms")
-                        .HasForeignKey("TypeOfRoomsStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TypeOfRoomStatus");
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.UserEntity", b =>
-                {
-                    b.HasOne("Hotel.DataAccess.Entities.UserRoleEntity", "UserRole")
-                        .WithMany("Users")
-                        .HasForeignKey("UserRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hotel.DataAccess.Entities.UserStatusEntity", "UserStatus")
-                        .WithMany("Users")
-                        .HasForeignKey("UserStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserRole");
-
-                    b.Navigation("UserStatus");
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.AnnouncementStatusEntity", b =>
-                {
-                    b.Navigation("Announcements");
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.BookingStatusEntity", b =>
-                {
-                    b.Navigation("Bookings");
-                });
-
             modelBuilder.Entity("Hotel.DataAccess.Entities.HotelEntity", b =>
                 {
                     b.Navigation("Announcements");
@@ -881,21 +583,9 @@ namespace Hotel.DataAccess.Migrations
                     b.Navigation("Rooms");
                 });
 
-            modelBuilder.Entity("Hotel.DataAccess.Entities.ReviewStatusEntity", b =>
-                {
-                    b.Navigation("Reviews");
-                });
-
             modelBuilder.Entity("Hotel.DataAccess.Entities.RoomEntity", b =>
                 {
                     b.Navigation("RoomImages");
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.RoomStatusEntity", b =>
-                {
-                    b.Navigation("Rooms");
-
-                    b.Navigation("TypeOfRooms");
                 });
 
             modelBuilder.Entity("Hotel.DataAccess.Entities.TypeOfRoomEntity", b =>
@@ -905,11 +595,6 @@ namespace Hotel.DataAccess.Migrations
                     b.Navigation("Rooms");
                 });
 
-            modelBuilder.Entity("Hotel.DataAccess.Entities.TypeOfRoomStatusEntity", b =>
-                {
-                    b.Navigation("TypeOfRooms");
-                });
-
             modelBuilder.Entity("Hotel.DataAccess.Entities.UserEntity", b =>
                 {
                     b.Navigation("Announcements");
@@ -917,16 +602,6 @@ namespace Hotel.DataAccess.Migrations
                     b.Navigation("Bookings");
 
                     b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.UserRoleEntity", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Hotel.DataAccess.Entities.UserStatusEntity", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

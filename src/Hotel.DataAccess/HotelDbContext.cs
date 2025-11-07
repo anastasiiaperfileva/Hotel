@@ -38,6 +38,7 @@ public class HotelDbContext: DbContext
         modelBuilder.Entity<UserEntity>().Property(x => x.Email).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<UserEntity>().HasIndex(x => x.Email).IsUnique();
         modelBuilder.Entity<UserEntity>().Property(x => x.PhoneNumber).IsRequired().HasMaxLength(30);
+        modelBuilder.Entity<UserEntity>().HasIndex(x => x.PhoneNumber).IsUnique();
         
         // Hotels
         modelBuilder.Entity<HotelEntity>().HasKey(x => x.Id);
@@ -46,6 +47,7 @@ public class HotelDbContext: DbContext
         modelBuilder.Entity<HotelEntity>().Property(x => x.Name).IsRequired().HasMaxLength(50);
         modelBuilder.Entity<HotelEntity>().Property(x => x.Address).IsRequired().HasMaxLength(300);
         modelBuilder.Entity<HotelEntity>().Property(x => x.Phone).IsRequired().HasMaxLength(30);
+        modelBuilder.Entity<HotelEntity>().HasIndex(x => x.Phone).IsUnique();
         modelBuilder.Entity<HotelEntity>().Property(x => x.Rating).HasPrecision(3, 2).HasDefaultValue(0);
         modelBuilder.Entity<HotelEntity>().HasCheckConstraint("CK_Hotel_Rating", "\"Rating\" >= 0 AND \"Rating\" <= 5");
         
@@ -58,6 +60,7 @@ public class HotelDbContext: DbContext
         modelBuilder.Entity<RoomEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         
         modelBuilder.Entity<RoomEntity>().Property(x => x.Number).IsRequired().HasMaxLength(5);
+        modelBuilder.Entity<RoomEntity>().HasIndex(x => new { x.HotelId, x.Number }).IsUnique();
 
         // RoomImages
         modelBuilder.Entity<RoomImageEntity>().HasKey(x => x.Id);
@@ -115,7 +118,7 @@ public class HotelDbContext: DbContext
         
         modelBuilder.Entity<AnnouncementEntity>().HasOne(x => x.Hotel).WithMany(x => x.Announcements).HasForeignKey(x => x.HotelId);
         modelBuilder.Entity<AnnouncementEntity>().HasOne(x => x.User).WithMany(x => x.Announcements).HasForeignKey(x => x.UserId);
-        modelBuilder.Entity<BookingEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
+        modelBuilder.Entity<AnnouncementEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         
         modelBuilder.Entity<AnnouncementEntity>().Property(x => x.Title).IsRequired().HasMaxLength(150);
         modelBuilder.Entity<AnnouncementEntity>().Property(x => x.Text).IsRequired().HasMaxLength(1000);

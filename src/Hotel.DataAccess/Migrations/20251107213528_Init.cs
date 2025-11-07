@@ -7,43 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hotel.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AnnouncementStatuses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnnouncementStatuses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BookingStatuses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookingStatuses", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Hotel",
                 columns: table => new
@@ -66,86 +34,6 @@ namespace Hotel.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReviewStatuses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReviewStatuses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoomsStatuses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoomsStatuses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TypesOfRoomsStatuses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TypesOfRoomsStatuses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRoles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserStatuses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserStatuses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TypesOfRooms",
                 columns: table => new
                 {
@@ -159,8 +47,7 @@ namespace Hotel.DataAccess.Migrations
                     Area = table.Column<double>(type: "double precision", precision: 8, scale: 2, nullable: false),
                     AvailabilityBalcony = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     Amenities = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    TypeOfRoomsStatusId = table.Column<int>(type: "integer", nullable: false),
-                    RoomStatusEntityId = table.Column<int>(type: "integer", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -171,17 +58,6 @@ namespace Hotel.DataAccess.Migrations
                     table.CheckConstraint("CK_TypeOfRoom_Area", "\"Area\" > 0");
                     table.CheckConstraint("CK_TypeOfRoom_RoomsCount", "\"RoomsCount\" > 0");
                     table.CheckConstraint("CK_TypeOfRooms_PricePerDay", "\"PricePerDay\" > 0");
-                    table.ForeignKey(
-                        name: "FK_TypesOfRooms_RoomsStatuses_RoomStatusEntityId",
-                        column: x => x.RoomStatusEntityId,
-                        principalTable: "RoomsStatuses",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TypesOfRooms_TypesOfRoomsStatuses_TypeOfRoomsStatusId",
-                        column: x => x.TypeOfRoomsStatusId,
-                        principalTable: "TypesOfRoomsStatuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,8 +72,8 @@ namespace Hotel.DataAccess.Migrations
                     Surname = table.Column<string>(type: "text", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PhoneNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    UserStatusId = table.Column<int>(type: "integer", nullable: false),
-                    UserRoleId = table.Column<int>(type: "integer", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -205,18 +81,6 @@ namespace Hotel.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_UserRoles_UserRoleId",
-                        column: x => x.UserRoleId,
-                        principalTable: "UserRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_UserStatuses_UserStatusId",
-                        column: x => x.UserStatusId,
-                        principalTable: "UserStatuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,7 +92,7 @@ namespace Hotel.DataAccess.Migrations
                     HotelId = table.Column<int>(type: "integer", nullable: false),
                     TypeOfRoomId = table.Column<int>(type: "integer", nullable: false),
                     Number = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: false),
-                    RoomStatusId = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -240,12 +104,6 @@ namespace Hotel.DataAccess.Migrations
                         name: "FK_Rooms_Hotel_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Rooms_RoomsStatuses_RoomStatusId",
-                        column: x => x.RoomStatusId,
-                        principalTable: "RoomsStatuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -269,7 +127,7 @@ namespace Hotel.DataAccess.Migrations
                     PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AnnouncementStatusId = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -278,12 +136,6 @@ namespace Hotel.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Announcements", x => x.Id);
                     table.CheckConstraint("CK_News_EndDateAfterStartDate", "\"EndDate\" >= \"StartDate\"");
-                    table.ForeignKey(
-                        name: "FK_Announcements_AnnouncementStatuses_AnnouncementStatusId",
-                        column: x => x.AnnouncementStatusId,
-                        principalTable: "AnnouncementStatuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Announcements_Hotel_HotelId",
                         column: x => x.HotelId,
@@ -311,7 +163,7 @@ namespace Hotel.DataAccess.Migrations
                     TotalPrice = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
                     DateCreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     SpecialRequests = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    BookingStatusId = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     TypeOfRoomId = table.Column<int>(type: "integer", nullable: false),
                     ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -324,12 +176,6 @@ namespace Hotel.DataAccess.Migrations
                     table.CheckConstraint("CK_Booking_DateCreatedAt_NotFuture", "\"DateCreatedAt\" <= CURRENT_TIMESTAMP");
                     table.CheckConstraint("CK_Booking_GuestsCount", "\"GuestsCount\" > 0");
                     table.CheckConstraint("CK_Booking_TotalPrice", "\"TotalPrice\" > 0");
-                    table.ForeignKey(
-                        name: "FK_Booking_BookingStatuses_BookingStatusId",
-                        column: x => x.BookingStatusId,
-                        principalTable: "BookingStatuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Booking_TypesOfRooms_TypeOfRoomId",
                         column: x => x.TypeOfRoomId,
@@ -355,7 +201,7 @@ namespace Hotel.DataAccess.Migrations
                     Text = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     Rating = table.Column<int>(type: "integer", nullable: false),
                     PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    ReviewStatusId = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     ExternalId = table.Column<Guid>(type: "uuid", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -368,12 +214,6 @@ namespace Hotel.DataAccess.Migrations
                         name: "FK_Reviews_Hotel_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reviews_ReviewStatuses_ReviewStatusId",
-                        column: x => x.ReviewStatusId,
-                        principalTable: "ReviewStatuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -411,11 +251,6 @@ namespace Hotel.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Announcements_AnnouncementStatusId",
-                table: "Announcements",
-                column: "AnnouncementStatusId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Announcements_ExternalId",
                 table: "Announcements",
                 column: "ExternalId",
@@ -430,17 +265,6 @@ namespace Hotel.DataAccess.Migrations
                 name: "IX_Announcements_UserId",
                 table: "Announcements",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnnouncementStatuses_ExternalId",
-                table: "AnnouncementStatuses",
-                column: "ExternalId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Booking_BookingStatusId",
-                table: "Booking",
-                column: "BookingStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Booking_ExternalId",
@@ -459,15 +283,15 @@ namespace Hotel.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingStatuses_ExternalId",
-                table: "BookingStatuses",
+                name: "IX_Hotel_ExternalId",
+                table: "Hotel",
                 column: "ExternalId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hotel_ExternalId",
+                name: "IX_Hotel_Phone",
                 table: "Hotel",
-                column: "ExternalId",
+                column: "Phone",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -482,20 +306,9 @@ namespace Hotel.DataAccess.Migrations
                 column: "HotelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ReviewStatusId",
-                table: "Reviews",
-                column: "ReviewStatusId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_UserId",
                 table: "Reviews",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReviewStatuses_ExternalId",
-                table: "ReviewStatuses",
-                column: "ExternalId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoomImages_ExternalId",
@@ -515,14 +328,10 @@ namespace Hotel.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rooms_HotelId",
+                name: "IX_Rooms_HotelId_Number",
                 table: "Rooms",
-                column: "HotelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rooms_RoomStatusId",
-                table: "Rooms",
-                column: "RoomStatusId");
+                columns: new[] { "HotelId", "Number" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rooms_TypeOfRoomId",
@@ -530,36 +339,8 @@ namespace Hotel.DataAccess.Migrations
                 column: "TypeOfRoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomsStatuses_ExternalId",
-                table: "RoomsStatuses",
-                column: "ExternalId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TypesOfRooms_ExternalId",
                 table: "TypesOfRooms",
-                column: "ExternalId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TypesOfRooms_RoomStatusEntityId",
-                table: "TypesOfRooms",
-                column: "RoomStatusEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TypesOfRooms_TypeOfRoomsStatusId",
-                table: "TypesOfRooms",
-                column: "TypeOfRoomsStatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TypesOfRoomsStatuses_ExternalId",
-                table: "TypesOfRoomsStatuses",
-                column: "ExternalId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_ExternalId",
-                table: "UserRoles",
                 column: "ExternalId",
                 unique: true);
 
@@ -576,19 +357,9 @@ namespace Hotel.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_UserRoleId",
+                name: "IX_Users_PhoneNumber",
                 table: "Users",
-                column: "UserRoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_UserStatusId",
-                table: "Users",
-                column: "UserStatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserStatuses_ExternalId",
-                table: "UserStatuses",
-                column: "ExternalId",
+                column: "PhoneNumber",
                 unique: true);
         }
 
@@ -608,37 +379,16 @@ namespace Hotel.DataAccess.Migrations
                 name: "RoomImages");
 
             migrationBuilder.DropTable(
-                name: "AnnouncementStatuses");
-
-            migrationBuilder.DropTable(
-                name: "BookingStatuses");
-
-            migrationBuilder.DropTable(
-                name: "ReviewStatuses");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
-
-            migrationBuilder.DropTable(
-                name: "UserStatuses");
-
-            migrationBuilder.DropTable(
                 name: "Hotel");
 
             migrationBuilder.DropTable(
                 name: "TypesOfRooms");
-
-            migrationBuilder.DropTable(
-                name: "RoomsStatuses");
-
-            migrationBuilder.DropTable(
-                name: "TypesOfRoomsStatuses");
         }
     }
 }
