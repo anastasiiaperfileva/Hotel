@@ -11,6 +11,7 @@ public class BookingEntity:BaseEntity
     public DateTime CheckOutDate { get; set; }
     public int GuestsCount { get; set; }
     public decimal TotalPrice { get; set; }
+    public DateTime DateCreatedAt { get;set }
     public string SpecialRequests { get; set; }
     
     public int BookingStatusId { get; set; }
