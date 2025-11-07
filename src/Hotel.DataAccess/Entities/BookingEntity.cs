@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Hotel.DataAccess.Primitives;
+
 namespace Hotel.DataAccess.Entities;
 
 [Table("Booking")]
@@ -14,8 +16,7 @@ public class BookingEntity:BaseEntity
     public DateTime DateCreatedAt { get; set; }
     public string SpecialRequests { get; set; }
     
-    public int BookingStatusId { get; set; }
-    public BookingStatusEntity BookingStatus { get; set; }
+    public BookingStatus Status { get; set; }
     
     public int TypeOfRoomId { get; set; }
     public TypeOfRoomEntity TypeOfRoom { get; set; }

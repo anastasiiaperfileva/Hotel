@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-
+using Hotel.DataAccess.Primitives;
 namespace Hotel.DataAccess.Entities;
 
 [Table("Rooms")]
@@ -13,8 +13,7 @@ public class RoomEntity: BaseEntity
     
     public string Number { get; set; }
     
-    public int RoomStatusId { get; set; }
-    public RoomStatusEntity RoomStatus { get; set; }
+    public RoomStatus Status { get; set; }
     
     public virtual ICollection<RoomImageEntity> RoomImages { get; set; }
 }

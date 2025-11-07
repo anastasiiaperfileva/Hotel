@@ -8,26 +8,19 @@ namespace Hotel.DataAccess;
 public class HotelDbContext: DbContext
 {
     public DbSet<UserEntity> Users { get; set; }
-    public DbSet<UserRoleEntity> UserRoles { get; set; }
-    public DbSet<UserStatusEntity> UserStatuses { get; set; }
 
     public DbSet<HotelEntity> Hotels { get; set; }
 
     public DbSet<RoomEntity> Rooms { get; set; }
-    public DbSet<RoomStatusEntity> RoomStatuses { get; set; }
     public DbSet<RoomImageEntity> RoomImages { get; set; }
 
     public DbSet<TypeOfRoomEntity> TypesOfRooms { get; set; }
-    public DbSet<TypeOfRoomStatusEntity> TypesOfRoomStatuses { get; set; }
 
     public DbSet<BookingEntity> Bookings { get; set; }
-    public DbSet<BookingStatusEntity> BookingStatuses { get; set; }
 
     public DbSet<AnnouncementEntity> Announcements { get; set; }
-    public DbSet<AnnouncementStatusEntity> AnnouncementStatuses { get; set; }
 
     public DbSet<ReviewEntity> Reviews { get; set; }
-    public DbSet<ReviewStatusEntity> ReviewStatuses { get; set; }
 
     public HotelDbContext(DbContextOptions options) : base(options)
     {
@@ -38,13 +31,9 @@ public class HotelDbContext: DbContext
         // Users 
         modelBuilder.Entity<UserEntity>().HasKey(x => x.Id);
         modelBuilder.Entity<UserEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        
-        modelBuilder.Entity<UserEntity>().HasOne(x => x.UserRole)
-            .WithMany(x => x.Users)
-            .HasForeignKey(x => x.UserRoleId);
-        modelBuilder.Entity<UserEntity>().HasOne(x => x.UserStatus)
-            .WithMany(x => x.Users)
-            .HasForeignKey(x => x.UserStatusId);
+
+        modelBuilder.Entity<UserEntity>().Property(x => x.Role).HasConversion<int>();
+        modelBuilder.Entity<UserEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         
         modelBuilder.Entity<UserEntity>().Property(x => x.Email).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<UserEntity>().HasIndex(x => x.Email).IsUnique();
@@ -66,7 +55,7 @@ public class HotelDbContext: DbContext
         
         modelBuilder.Entity<RoomEntity>().HasOne(x => x.Hotel).WithMany(x => x.Rooms).HasForeignKey(x => x.HotelId);
         modelBuilder.Entity<RoomEntity>().HasOne(x => x.TypeOfRoom).WithMany(x => x.Rooms).HasForeignKey(x => x.TypeOfRoomId);
-        modelBuilder.Entity<RoomEntity>().HasOne(x => x.RoomStatus).WithMany(x => x.Rooms).HasForeignKey(x => x.RoomStatusId);
+        modelBuilder.Entity<RoomEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         
         modelBuilder.Entity<RoomEntity>().Property(x => x.Number).IsRequired().HasMaxLength(5);
 
@@ -88,7 +77,7 @@ public class HotelDbContext: DbContext
         modelBuilder.Entity<TypeOfRoomEntity>().HasKey(x => x.Id);
         modelBuilder.Entity<TypeOfRoomEntity>().HasIndex(x => x.ExternalId).IsUnique();
         
-        modelBuilder.Entity<TypeOfRoomEntity>().HasOne(x => x.TypeOfRoomStatus).WithMany(x => x.TypeOfRooms).HasForeignKey(x => x.TypeOfRoomsStatusId);
+        modelBuilder.Entity<TypeOfRoomEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         
         modelBuilder.Entity<TypeOfRoomEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<TypeOfRoomEntity>().Property(x => x.Description).HasMaxLength(1000);
@@ -106,7 +95,7 @@ public class HotelDbContext: DbContext
         modelBuilder.Entity<BookingEntity>().HasIndex(x => x.ExternalId).IsUnique();
         
         modelBuilder.Entity<BookingEntity>().HasOne(x => x.User).WithMany(x => x.Bookings).HasForeignKey(x => x.UserId);
-        modelBuilder.Entity<BookingEntity>().HasOne(x => x.BookingStatus).WithMany(x => x.Bookings).HasForeignKey(x => x.BookingStatusId);
+        modelBuilder.Entity<BookingEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         modelBuilder.Entity<BookingEntity>().HasOne(x => x.TypeOfRoom).WithMany(x => x.Bookings).HasForeignKey(x => x.TypeOfRoomId);
        
         modelBuilder.Entity<BookingEntity>().Property(x => x.CheckInDate).IsRequired();
@@ -126,7 +115,7 @@ public class HotelDbContext: DbContext
         
         modelBuilder.Entity<AnnouncementEntity>().HasOne(x => x.Hotel).WithMany(x => x.Announcements).HasForeignKey(x => x.HotelId);
         modelBuilder.Entity<AnnouncementEntity>().HasOne(x => x.User).WithMany(x => x.Announcements).HasForeignKey(x => x.UserId);
-        modelBuilder.Entity<AnnouncementEntity>().HasOne(x => x.AnnouncementStatus).WithMany(x => x.Announcements).HasForeignKey(x => x.AnnouncementStatusId);
+        modelBuilder.Entity<BookingEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         
         modelBuilder.Entity<AnnouncementEntity>().Property(x => x.Title).IsRequired().HasMaxLength(150);
         modelBuilder.Entity<AnnouncementEntity>().Property(x => x.Text).IsRequired().HasMaxLength(1000);
@@ -142,46 +131,12 @@ public class HotelDbContext: DbContext
         
         modelBuilder.Entity<ReviewEntity>().HasOne(x => x.Hotel).WithMany(x => x.Reviews).HasForeignKey(x => x.HotelId);
         modelBuilder.Entity<ReviewEntity>().HasOne(x => x.User).WithMany(x => x.Reviews).HasForeignKey(x => x.UserId);
-        modelBuilder.Entity<ReviewEntity>().HasOne(x => x.ReviewStatus).WithMany(x => x.Reviews).HasForeignKey(x => x.ReviewStatusId);
+        modelBuilder.Entity<ReviewEntity>().Property(x => x.Status).HasConversion<int>().IsRequired();
         
         modelBuilder.Entity<ReviewEntity>().Property(x => x.Text).IsRequired().HasMaxLength(1000);
         modelBuilder.Entity<ReviewEntity>().Property(x => x.Rating).IsRequired();
         modelBuilder.Entity<ReviewEntity>().HasCheckConstraint("CK_Review_Rating", "\"Rating\" BETWEEN 1 AND 5");
         modelBuilder.Entity<ReviewEntity>().Property(x => x.PublishedAt).IsRequired().HasDefaultValueSql("CURRENT_TIMESTAMP");
         
-        // UserRoles
-        modelBuilder.Entity<UserRoleEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<UserRoleEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        modelBuilder.Entity<UserRoleEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
-        
-        // UserStatus
-        modelBuilder.Entity<UserStatusEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<UserStatusEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        modelBuilder.Entity<UserStatusEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
-        
-        // BookingStatus
-        modelBuilder.Entity<BookingStatusEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<BookingStatusEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        modelBuilder.Entity<BookingStatusEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
-        
-        // AnnouncementStatus
-        modelBuilder.Entity<AnnouncementStatusEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<AnnouncementStatusEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        modelBuilder.Entity<AnnouncementStatusEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
-        
-        // ReviewStatus
-        modelBuilder.Entity<ReviewStatusEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<ReviewStatusEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        modelBuilder.Entity<ReviewStatusEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
-        
-        // RoomStatus
-        modelBuilder.Entity<RoomStatusEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<RoomStatusEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        modelBuilder.Entity<RoomStatusEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
-
-        // TypeOfRoomStatus
-        modelBuilder.Entity<TypeOfRoomStatusEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<TypeOfRoomStatusEntity>().HasIndex(x => x.ExternalId).IsUnique();
-        modelBuilder.Entity<TypeOfRoomStatusEntity>().Property(x => x.Name).IsRequired().HasMaxLength(100);
     }
 }

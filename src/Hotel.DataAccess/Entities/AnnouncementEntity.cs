@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 namespace Hotel.DataAccess.Entities;
+using Hotel.DataAccess.Primitives;
 
 [Table("Announcements")]
 public class AnnouncementEntity: BaseEntity
@@ -16,6 +17,5 @@ public class AnnouncementEntity: BaseEntity
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     
-    public int AnnouncementStatusId { get; set; }
-    public AnnouncementStatusEntity AnnouncementStatus { get; set; }
+    public AnnouncementStatus Status { get; set; }
 }

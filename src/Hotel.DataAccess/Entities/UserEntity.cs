@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Hotel.DataAccess.Primitives;
 
 namespace Hotel.DataAccess.Entities;
 
@@ -12,11 +13,8 @@ public class UserEntity:BaseEntity
     public DateTime BirthDate { get; set; }
     public string PhoneNumber { get; set; }
     
-    public int UserStatusId { get; set; }
-    public UserStatusEntity UserStatus { get; set; }
-    
-    public int UserRoleId { get; set; }
-    public UserRoleEntity UserRole { get; set; }
+    public UserRole Role { get; set; }
+    public UserStatus Status { get; set; }
     
     public virtual ICollection<BookingEntity> Bookings { get; set; }
     public virtual ICollection<ReviewEntity> Reviews { get; set; }

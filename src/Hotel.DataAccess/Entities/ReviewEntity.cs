@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 namespace Hotel.DataAccess.Entities;
+using Hotel.DataAccess.Primitives;
 
 [Table("Reviews")]
 public class ReviewEntity: BaseEntity
@@ -14,6 +15,5 @@ public class ReviewEntity: BaseEntity
     public int Rating { get; set; }
     public DateTime PublishedAt { get; set; }
     
-    public int ReviewStatusId { get; set; }
-    public ReviewStatusEntity ReviewStatus { get; set; }
+   public ReviewStatus Status { get; set; }
 }

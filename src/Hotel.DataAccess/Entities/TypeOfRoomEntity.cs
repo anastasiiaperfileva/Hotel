@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Hotel.DataAccess.Primitives;
 namespace Hotel.DataAccess.Entities;
+
+
 
 [Table("TypesOfRooms")]
 public class TypeOfRoomEntity: BaseEntity
@@ -13,8 +16,7 @@ public class TypeOfRoomEntity: BaseEntity
     public bool AvailabilityBalcony { get; set; }
     public string Amenities { get; set; }
     
-    public int TypeOfRoomsStatusId { get; set; }
-    public TypeOfRoomStatusEntity TypeOfRoomStatus { get; set; }
+    public TypeOfRoomStatus Status { get; set; }
     
     public virtual ICollection<BookingEntity> Bookings { get; set; }
     public virtual ICollection<RoomEntity> Rooms { get; set; }
