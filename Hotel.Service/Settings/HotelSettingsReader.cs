@@ -6,8 +6,7 @@ public static class HotelSettingsReader
     {
         return new HotelSettings()
         {
-            ServiceUri = configuration.GetValue<Uri>("Uri"),
-            HotelDbContextConnectionString = configuration.GetValue<string>("HotelDbContext"),
+            HotelDbContextConnectionString = configuration.GetConnectionString("HotelDbContext"),
         };
     }
 }
