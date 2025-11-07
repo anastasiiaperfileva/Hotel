@@ -2,7 +2,7 @@
 
 namespace Hotel.DataAccess.Entities;
 
-[Table("TypesOfRoomsStatuses")] 
+[Table("RoomsStatuses")] 
 public class RoomStatusEntity: BaseEntity
 {
     public string Name { get; set; }
